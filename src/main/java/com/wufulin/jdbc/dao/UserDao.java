@@ -1,6 +1,6 @@
 package com.wufulin.jdbc.dao;
 
-import com.wfl.domain.User;
+import com.wufulin.jdbc.entity.*;
 
 public interface UserDao {
 	

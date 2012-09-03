@@ -5,10 +5,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.wfl.domain.User;
-import com.wfl.jdbc.JdbcUtilsSingle;
-import com.wfl.jdbc.dao.DaoException;
-import com.wfl.jdbc.dao.UserDao;
+import com.wufulin.jdbc.entity.*;
+import com.wufulin.jdbc.JdbcUtilsSingle;
+import com.wufulin.jdbc.dao.DaoException;
+import com.wufulin.jdbc.dao.UserDao;
 
 public class UserDaoJdbcImpl implements UserDao {
 

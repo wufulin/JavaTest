@@ -2,7 +2,7 @@ package com.wufulin.jdbc;
 
 import java.lang.reflect.Constructor;
 
-import com.wfl.domain.User;
+import com.wufulin.jdbc.entity.*;
 
 public class ReflectTest {
 

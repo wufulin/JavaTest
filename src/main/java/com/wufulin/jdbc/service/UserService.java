@@ -1,7 +1,7 @@
 package com.wufulin.jdbc.service;
 
-import com.wfl.domain.User;
-import com.wfl.jdbc.dao.UserDao;
+import com.wufulin.jdbc.entity.*;
+import com.wufulin.jdbc.dao.UserDao;
 
 public class UserService {
 	private UserDao userDao;
