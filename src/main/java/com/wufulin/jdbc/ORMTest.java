@@ -21,7 +21,7 @@ public class ORMTest {
 		System.out.println(user);
 	}
 
-	static Object getObject(String sql, Class clazz) throws Exception
+	static Object getObject(String sql, Class<User> clazz) throws Exception
 			 {
 		Connection conn = null;
 		PreparedStatement ps = null;

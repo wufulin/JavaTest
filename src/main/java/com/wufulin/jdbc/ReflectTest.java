@@ -15,8 +15,8 @@ public class ReflectTest {
 		System.out.println(user);
 	}
 
-	static Object create(Class clazz) throws Exception{
-		Constructor con=clazz.getConstructor(String.class);
+	static Object create(Class<User> clazz) throws Exception{
+		Constructor<User> con=clazz.getConstructor(String.class);
 		Object obj=con.newInstance("wufulin");
 		return obj;
 	}
