@@ -25,6 +25,7 @@ public class ImageUtils {
 	
 //	public static void main(String[] args){
 //		File from=new File("d:/Lighthouse.jpg");
-//		ImageUtils.GenerateThumbnail(from, "d:/Lighthouse_thumbnail.jpg", 0.25f);
+//		File to=new File("Lighthouse_thumbnail.jpg");
+//		ImageUtils.GenerateThumbnail(from, to, 0.25f);
 //	}
 }
