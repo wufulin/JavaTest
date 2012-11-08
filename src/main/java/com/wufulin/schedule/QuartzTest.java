@@ -39,15 +39,15 @@ public class QuartzTest {
 			// Start if off
 			scheduler.start();
 
-			try {
-	            // wait 65 seconds to show job
-	            Thread.sleep(65L * 1000L); 
-	            // executing...
-	        } catch (Exception e) {
-	        }
+//			try {
+//	            // wait 65 seconds to show job
+//	            Thread.sleep(65L * 1000L); 
+//	            // executing...
+//	        } catch (Exception e) {
+//	        }
 			
 			// shutdown
-			scheduler.shutdown();
+//			scheduler.shutdown();
 		} catch (SchedulerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

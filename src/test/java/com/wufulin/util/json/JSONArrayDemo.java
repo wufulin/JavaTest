@@ -11,6 +11,9 @@ public class JSONArrayDemo {
 	 */
 	public static void main(String[] args) throws JSONException {
 		
+//		Vector<String> vector=new Vector<String>();
+//		vector.add("aabbvv");
+//		System.out.println("String : "+vector.toString()+" Size : "+vector.toString().getBytes().length);
 		JSONArray jsonarray=new JSONArray("[{'name':'wufulin1','age':21},{'name':'wufulin2','age':22}]");
 		for(int i=0;i<jsonarray.length();i++){
 			String name=jsonarray.getJSONObject(i).getString("name");
