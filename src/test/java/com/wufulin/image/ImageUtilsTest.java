@@ -5,7 +5,7 @@ import java.io.File;
 import junit.framework.Assert;
 import org.junit.Test;
 
-public class TestImageUtils {
+public class ImageUtilsTest {
 
 	@Test
 	public void testGenerateThumbnail(){
