@@ -7,7 +7,6 @@ import org.junit.Test;
 
 public class ImageUtilsTest {
 
-	@Test
 	public void testGenerateThumbnail(){
 		
 		File from=new File("Lighthouse.jpg");
