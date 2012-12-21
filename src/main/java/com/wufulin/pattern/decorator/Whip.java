@@ -1,4 +1,4 @@
-package com.wufulin.pattern.decorator;
+package com.wufulin.pattern.Decorator;
  
 public class Whip extends CondimentDecorator {
 	Beverage beverage;

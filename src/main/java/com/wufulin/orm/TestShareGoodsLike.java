@@ -1,5 +1,9 @@
 package com.wufulin.orm;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,13 +15,20 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
 import com.wufulin.orm.entity.ShareGoodsLike;
+import com.wufulin.util.SetsUtil;
 
 public class TestShareGoodsLike {
 
-	private Map<Integer,Set<Integer>> userGoodsMap=new HashMap<Integer, Set<Integer>>();
-	private Map<Integer,Set<Integer>> goodsUsersMap=new HashMap<Integer,Set<Integer>>();
+	public static final int K=3;	// 兴趣最接近的K个用户
+	public static final int TOPN=2;	// 推荐TOPN个商品
+	private Map<Integer,Set<Integer>> userGoodsMap=new HashMap<Integer, Set<Integer>>();	// 用户--商品映射表
+	private Map<Integer,Set<Integer>> goodsUsersMap=new HashMap<Integer,Set<Integer>>();	// 商品--用户映射表
 	
-	public void UserSimilarity(){
+	/**
+	 * 计算用户相似度矩阵
+	 * @return
+	 */
+	public Map<Integer,List<UserSimilar>> calculateUserSimilarity(){
 		@SuppressWarnings("deprecation")
 		SessionFactory sessionFactory=new Configuration()
 										.configure()
@@ -108,7 +119,98 @@ public class TestShareGoodsLike {
 		
 		// calculate final similarity matrix W
 		System.out.println("----- calculate final similarity matrix W -----");
-		Map<Integer,Map<Integer,Integer>> w=new HashMap<Integer,Map<Integer,Integer>>();
+		Map<Integer,List<UserSimilar>> w=new HashMap<Integer,List<UserSimilar>>();
+		for(Integer i:c.keySet()){
+			Map<Integer,Integer> iMap=c.get(i);
+			if(!w.containsKey(i)){
+				w.put(i, new ArrayList<UserSimilar>());
+			}
+			List<UserSimilar> userSimilars=w.get(i);
+			int nu=userGoodsMap.get(i).size();
+			for(Integer j:iMap.keySet()){
+				int nv=userGoodsMap.get(j).size();
+				double value=iMap.get(j)/Math.sqrt(nv*nu);
+				UserSimilar userSimilar=new UserSimilar(j, value);
+				userSimilars.add(userSimilar);
+			}
+		}
+		
+		for(Integer i:w.keySet()){
+			System.out.print("User "+i+" --> ");
+			List<UserSimilar> userSimilars=w.get(i);
+			for(UserSimilar us:userSimilars){
+				System.out.print(us.getUserId()+" = "+us.getSimilar()+"\t");
+			}
+			System.out.println();
+		}
+		
+		// return the matrix W
+		return w;
+	}
+
+	/**
+	 * 找出与用户相似度最大的K个用户
+	 * @param userId 用户ID
+	 * @param k	表示查找k个用户
+	 * @return
+	 */
+	public List<UserSimilar> findKSimilarUsers(int userId,int k){
+		List<UserSimilar> kSimilarUsers=new ArrayList<UserSimilar>();
+		Map<Integer,List<UserSimilar>> w=calculateUserSimilarity();
+		List<UserSimilar> userSimilars=w.get(userId);
+		Collections.sort(userSimilars, new UserSimilarComparator());
+		for(UserSimilar us:userSimilars){
+			if(kSimilarUsers.size()>=k){
+				break;
+			}
+			kSimilarUsers.add(us);
+		}
+		return kSimilarUsers;
+	}
+	
+	/**
+	 * 向指定用户推荐topN个商品
+	 * @param userId 用户ID
+	 * @param topN	推荐商品的数量
+	 * @return
+	 * @throws Exception
+	 */
+	public List<ItemSimilar> recommend(int userId,int topN) throws Exception{
+		List<UserSimilar> us=findKSimilarUsers(userId, K);
+		Set<Integer> setsUnion=null;
+		
+		for(UserSimilar u:us){
+			Set<Integer> sA=userGoodsMap.get(u.getUserId());
+			setsUnion=SetsUtil.union(sA, setsUnion);
+		}
+		
+		Set<Integer> setUserGoods=userGoodsMap.get(userId);
+		Set<Integer> setDiff=SetsUtil.difference(setUserGoods, setsUnion);
+		
+		List<ItemSimilar> recommendList=new ArrayList<ItemSimilar>();
+		for(Integer id:setDiff){
+			ItemSimilar item=new ItemSimilar(id);
+			double pi=0.0;
+			for(UserSimilar u:us){
+				Set<Integer> userGoods=userGoodsMap.get(u.getUserId());
+				if(userGoods.contains(id)){
+					pi+=u.getSimilar();
+				}
+			}
+			item.setSimilar(pi);
+			recommendList.add(item);
+		}
+		
+		Collections.sort(recommendList, new ItemSimilarComparator());
+		
+		List<ItemSimilar> topNRecommendations=new ArrayList<ItemSimilar>();
+		for(ItemSimilar	item:recommendList){
+			if(topNRecommendations.size()>=topN){
+				break;
+			}
+			topNRecommendations.add(item);
+		}
+		return topNRecommendations;
 	}
 	
 	/**
@@ -117,7 +219,19 @@ public class TestShareGoodsLike {
 	public static void main(String[] args) {
 		
 		TestShareGoodsLike test=new TestShareGoodsLike();
-		test.UserSimilarity();
+		try {
+			Collection<Integer> list=Arrays.asList(35,33,39,99,36,37,90);
+			for (Integer userId:list) {
+				List<ItemSimilar> topNRecommends = test.recommend(userId, 2);
+				for (ItemSimilar item : topNRecommends) {
+					System.out.println(" 用户" + userId + "可能喜欢: "
+							+ item.getGoodsId() + " \t兴趣度: "
+							+ item.getSimilar());
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 }

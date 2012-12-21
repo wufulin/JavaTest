@@ -1,4 +1,4 @@
-package com.wufulin.pattern.factoryMethod;
+package com.wufulin.pattern.FactoryMethod;
 
 import java.util.ArrayList;
 

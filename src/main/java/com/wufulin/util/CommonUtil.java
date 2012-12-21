@@ -15,6 +15,10 @@ import java.util.regex.Pattern;
 
 import javax.imageio.ImageIO;
 
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+
 public class CommonUtil {
 
 	public static byte[] long2ByteArray(long l) {
@@ -153,4 +157,5 @@ public class CommonUtil {
 			count++;
 		}
 	}
+
 }

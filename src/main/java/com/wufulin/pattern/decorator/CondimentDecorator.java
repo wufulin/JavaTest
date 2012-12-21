@@ -1,4 +1,4 @@
-package com.wufulin.pattern.decorator;
+package com.wufulin.pattern.Decorator;
 
 public abstract class CondimentDecorator extends Beverage {
 

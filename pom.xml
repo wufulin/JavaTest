@@ -127,6 +127,11 @@
 			<artifactId>mysql-connector-java</artifactId>
 			<version>5.1.21</version>
 		</dependency>
+		<dependency>
+			<groupId>net.vidageek</groupId>
+			<artifactId>crawler</artifactId>
+			<version>1.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>
